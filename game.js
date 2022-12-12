@@ -35,8 +35,10 @@ class Cactus{
 
 let timer = 0;
 let cactusarr = [];
+let inTheAir = 0; 
 
 function fps(){
+
   requestAnimationFrame(fps);
   timer++;
   ctx.clearRect(0,0, canvas.width,canvas.height);
@@ -51,12 +53,29 @@ function fps(){
     }
     each.x--;
     each.draw();
-  })
+  }) 
+
+  if(jumping == true){
+    trex.y--;
+    inTheAir++;
+  }
+  if(jumping == false){
+    if(trex.y < 350){
+      trex.y++;
+    }
+  }
+  if(inTheAir > 100 || trex.y < 250){
+    jumping = false;
+    inTheAir = 0;
+  }
   trex.draw();
 }
+let jumping = false;
 fps();
 
 
-document.addEventListener('keydown',function(e)){
-  
-}
+document.addEventListener('keydown', function(e){
+  if(e.code === 'Space'){
+    jumping = true;
+  }
+})
