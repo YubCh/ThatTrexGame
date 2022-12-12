@@ -33,17 +33,13 @@ class Cactus{
   }
 }
 
-let timer = 0;
-let cactusarr = [];
-let inTheAir = 0; 
-
 function fps(){
 
-  requestAnimationFrame(fps);
+  animation = requestAnimationFrame(fps);
   timer++;
   ctx.clearRect(0,0, canvas.width,canvas.height);
 
-  if(timer % 120 === 0){
+  if((timer % (200 )) === 0){
     let cactus = new Cactus();
     cactusarr.push(cactus);
   }
@@ -52,6 +48,8 @@ function fps(){
       j.splice(i,1);
     }
     each.x--;
+
+    collision(trex,each)
     each.draw();
   }) 
 
@@ -68,14 +66,33 @@ function fps(){
     jumping = false;
     inTheAir = 0;
   }
+
   trex.draw();
 }
+
+function collision(trex, cactus){
+  let x_distance = cactus.x - (trex.x + trex.width);
+  let y_distance = cactus.y - (trex.y + trex.height);
+  if(x_distance <= 0 && y_distance <= 0){
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    cancelAnimationFrame(animation);
+  }
+}
+
+
+let timer = 0;
+let cactusarr = [];
+let inTheAir = 0; 
 let jumping = false;
+let animation;
 fps();
 
 
-document.addEventListener('keydown', function(e){
-  if(e.code === 'Space'){
-    jumping = true;
-  }
-})
+if(trex.y === 350){
+  document.addEventListener('keydown', function(e){
+   if(e.code === 'Space'){
+     jumping = true;
+    }
+  })
+}
+
