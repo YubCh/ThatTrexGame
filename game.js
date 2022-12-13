@@ -8,6 +8,12 @@ canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px
 canvas.width = window.innerWidth - 50;
 canvas.height = window.innerHeight - 50;
 
+let img_trex = new Image();
+img_trex.src = './images/rex.png';
+let img_cac = new Image();
+img_cac.src = './images/obstacle.png';
+const points_display = document.getElementById("points");
+let points = 0;
 
 let trex = {
   x:200,
@@ -17,6 +23,7 @@ let trex = {
   draw(){
     ctx.fillStyle = 'black';
     ctx.fillRect(this.x,this.y,this.width,this.height);
+    ctx.drawImage(img_trex,this.x - 30,this.y - 65, 120, 120);
   }
 }
 
@@ -30,18 +37,21 @@ class Cactus{
   draw(){
     ctx.fillStyle = 'green';
     ctx.fillRect(this.x,this.y,this.width,this.height);
+    ctx.drawImage(img_cac, this.x - 40, this.y - 80, 400, 400);
   }
 }
 
 function fps(){
-
   animation = requestAnimationFrame(fps);
   timer++;
+  points++;
+  points_display.innerText = points;
   ctx.clearRect(0,0, canvas.width,canvas.height);
 
-  if((timer % (200 )) === 0){
+  if((timer % (130 + Math.floor(Math.random() * 100))) === 0){
     let cactus = new Cactus();
     cactusarr.push(cactus);
+    timer = 0;
   }
   cactusarr.forEach((each, i, j) =>{
     if(each.x < 240){
@@ -88,7 +98,7 @@ let animation;
 fps();
 
 
-if(trex.y === 350){
+if(trex.y == 350){
   document.addEventListener('keydown', function(e){
    if(e.code === 'Space'){
      jumping = true;
