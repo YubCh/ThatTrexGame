@@ -14,6 +14,7 @@ let img_cac = new Image();
 img_cac.src = './images/obstacle.png';
 const points_display = document.getElementById("points");
 let points = 0;
+let pressed_space = false;
 
 let trex = {
   x:200,
@@ -37,7 +38,7 @@ class Cactus{
   draw(){
     ctx.fillStyle = 'green';
     ctx.fillRect(this.x,this.y,this.width,this.height);
-    ctx.drawImage(img_cac, this.x - 40, this.y - 80, 400, 400);
+    ctx.drawImage(img_cac, this.x - 40, this.y - 80, 200, 200);
   }
 }
 
@@ -57,25 +58,36 @@ function fps(){
     if(each.x < 240){
       j.splice(i,1);
     }
-    each.x--;
+    each.x -= 2;
 
     collision(trex,each)
     each.draw();
   }) 
 
   if(jumping == true){
-    trex.y--;
+    trex.y -= 4;
     inTheAir++;
   }
   if(jumping == false){
     if(trex.y < 350){
-      trex.y++;
+      if(trex.y < 210){
+        trex.y += 1;
+      }
+      else if(trex.y < 250){
+        trex.y += 2;
+      }
+      else
+        trex.y += 4;
     }
   }
-  if(inTheAir > 100 || trex.y < 250){
+  if(inTheAir > 180 || trex.y < 200){
     jumping = false;
     inTheAir = 0;
   }
+  if(trex.y == 350){
+    pressed_space = false;
+  }
+ 
 
   trex.draw();
 }
@@ -98,11 +110,14 @@ let animation;
 fps();
 
 
-if(trex.y == 350){
+
   document.addEventListener('keydown', function(e){
    if(e.code === 'Space'){
-     jumping = true;
+    if(pressed_space === false){
+        jumping = true;
+        pressed_space = true;
+      }
     }
   })
-}
+
 
